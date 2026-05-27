@@ -1,264 +1,816 @@
 <!DOCTYPE html>
 <html lang="ja">
-
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>ポートフォリオテンプレート</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>My Portfolio</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Inconsolata:wght@400;600&display=swap" rel="stylesheet">
 
-    <!-- Bootstrap CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- Bootstrap JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <style>
+    /* =====================
+       リセット & 基本設定
+    ===================== */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
 
-    <style>
-        .hero {
-            position: relative;
-            background-image: url("ChatGPT Image 2026年5月14日 17_17_01.jpeg");
-            background-size: cover;
-            background-position: center;
-            color: white;
-            padding: 120px 0;
-            text-align: center;
-        }
+    /* =====================
+       カラー変数
+       ここを変えると全体の色が変わります
+    ===================== */
+    :root {
+      --bg:      #ede8df; /* ページ背景 */
+      --bg2:     #e3ddd3; /* カード・ボックス背景 */
+      --bg3:     #f5f1eb; /* 明るいカード背景 */
+      --ink:     #1e1a14; /* 本文テキスト */
+      --ink2:    #4a4236; /* 薄めテキスト */
+      --ink3:    #8c8070; /* さらに薄いテキスト（ラベルなど） */
+      --accent:  #3d2e1e; /* メインアクセント（ボタン・見出し） */
+      --accent2: #6b4c30; /* サブアクセント（番号・影） */
+      --border:  #c4b89e; /* ボーダー色 */
+      --shadow:  #bdb09a; /* カードの影色 */
+    }
 
-        .hero::before {
-            content: "";
-            position: absolute;
-            inset: 0;
-            background: rgba(0, 0, 0, 0.5);
-        }
+    /* =====================
+       ベース
+    ===================== */
+    body {
+      background: var(--bg);
+      color: var(--ink);
+      font-family: 'Inconsolata', monospace;
+      font-size: 17px;
+      line-height: 1.65;
+    }
 
-        .hero .container {
-            position: relative;
-            z-index: 1;
-        }
+    /* =====================
+       ナビゲーション
+    ===================== */
+    nav {
+      background: var(--bg3);
+      border-bottom: 1px solid var(--border);
+      padding: 0 32px;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
 
-        footer {
-            background: #343a40;
-            color: #aaa;
-            padding: 20px 0;
-            text-align: center;
-            margin-top: 50px;
-        }
-    </style>
+    .nav-inner {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      height: 54px;
+      max-width: 960px;
+      margin: 0 auto;
+    }
+
+    /* サイト名 */
+    .nav-brand {
+      font-family: 'Press Start 2P', monospace;
+      font-size: 9px;
+      color: var(--accent);
+      text-decoration: none;
+      letter-spacing: 1px;
+    }
+
+    /* ナビリンク */
+    .nav-links {
+      display: flex;
+      gap: 32px;
+      list-style: none;
+    }
+
+    .nav-links a {
+      text-decoration: none;
+      color: var(--ink3);
+      font-family: 'Inconsolata', monospace;
+      font-size: 14px;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      transition: color .15s;
+    }
+
+    .nav-links a:hover {
+      color: var(--accent);
+    }
+
+    /* =====================
+       ヒーロー（最初の大見出し）
+    ===================== */
+    .hero {
+      padding: 88px 32px 80px;
+      max-width: 960px;
+      margin: 0 auto;
+    }
+
+    .hero-eyebrow {
+      font-family: 'Press Start 2P', monospace;
+      font-size: 8px;
+      color: var(--ink3);
+      letter-spacing: 2px;
+      margin-bottom: 28px;
+    }
+
+    .hero-title {
+      font-family: 'Press Start 2P', monospace;
+      font-size: clamp(12px, 2.2vw, 20px); /* 画面幅に合わせて自動調整 */
+      line-height: 2.1;
+      letter-spacing: 1px;
+      color: var(--ink);
+      margin-bottom: 32px;
+    }
+
+    .hero-title .sub {
+      color: var(--ink3);
+      font-size: clamp(8px, 1.4vw, 12px);
+      display: block;
+      margin-bottom: 8px;
+    }
+
+    /* 点滅カーソル */
+    .cursor {
+      display: inline-block;
+      width: 11px;
+      height: 17px;
+      background: var(--accent2);
+      animation: blink .9s step-end infinite;
+      vertical-align: middle;
+      margin-left: 4px;
+    }
+
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50%       { opacity: 0; }
+    }
+
+    /* AI制作の注記 */
+    .ai-note {
+      display: inline-block;
+      font-family: 'Press Start 2P', monospace;
+      font-size: 7px;
+      color: var(--ink3);
+      border: 1px solid var(--border);
+      padding: 6px 12px;
+      background: var(--bg2);
+    }
+
+    /* =====================
+       区切り線
+    ===================== */
+    .divider {
+      border: none;
+      border-top: 1px solid var(--border);
+      max-width: 960px;
+      margin: 0 auto;
+      opacity: 0.6;
+    }
+
+    /* =====================
+       セクション共通
+    ===================== */
+    .section {
+      padding: 64px 32px;
+      max-width: 960px;
+      margin: 0 auto;
+    }
+
+    .section-header {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 40px;
+    }
+
+    /* セクションタイトルのタグ */
+    .section-tag {
+      font-family: 'Press Start 2P', monospace;
+      font-size: 7px;
+      color: var(--bg3);
+      background: var(--accent);
+      padding: 5px 10px;
+      letter-spacing: 1px;
+    }
+
+    .section-line {
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+      opacity: 0.6;
+    }
+
+    /* =====================
+       プロフィール
+    ===================== */
+    .profile-grid {
+      display: grid;
+      grid-template-columns: 160px 1fr;
+      gap: 48px;
+      align-items: start;
+    }
+
+    /* 写真エリア（画像に差し替える場合はここを編集） */
+    .profile-img {
+      aspect-ratio: 1;
+      background: var(--bg2);
+      border: 1px solid var(--border);
+      box-shadow: 4px 4px 0 var(--shadow);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: 'Press Start 2P', monospace;
+      font-size: 7px;
+      color: var(--ink3);
+      text-align: center;
+      line-height: 2.2;
+      padding: 10px;
+    }
+
+    .info-row {
+      display: flex;
+      gap: 12px;
+      font-size: 15px;
+      margin-bottom: 10px;
+      color: var(--ink2);
+    }
+
+    .info-key {
+      color: var(--ink3);
+      min-width: 72px;
+      font-size: 14px;
+    }
+
+    .info-key::after {
+      content: ':';
+    }
+
+    /* 強みボックス */
+    .profile-bio {
+      margin-top: 20px;
+      font-size: 15px;
+      color: var(--ink2);
+      line-height: 1.85;
+      padding: 16px 18px;
+      background: var(--bg2);
+      border: 1px solid var(--border);
+    }
+
+    .bio-label {
+      font-family: 'Press Start 2P', monospace;
+      font-size: 7px;
+      color: var(--ink3);
+      margin-bottom: 12px;
+      display: block;
+    }
+
+    /* 強み1行（英語ラベル + 日本語） */
+    .strength-row {
+      display: flex;
+      gap: 12px;
+      margin-bottom: 6px;
+      align-items: baseline;
+    }
+
+    .s-key {
+      font-family: 'Press Start 2P', monospace;
+      font-size: 7px;
+      color: var(--accent2);
+      min-width: 130px;
+      line-height: 1.8;
+    }
+
+    .s-val {
+      color: var(--ink2);
+      font-size: 15px;
+    }
+
+    /* =====================
+       制作物（Works）
+    ===================== */
+    .works-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .work-card {
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      box-shadow: 4px 4px 0 var(--shadow);
+      padding: 28px 32px;
+      transition: box-shadow .1s, transform .1s;
+    }
+
+    /* ホバーで押し込まれる効果 */
+    .work-card:hover {
+      box-shadow: 2px 2px 0 var(--shadow);
+      transform: translate(2px, 2px);
+    }
+
+    .work-head {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 14px;
+    }
+
+    .work-num {
+      font-family: 'Press Start 2P', monospace;
+      font-size: 7px;
+      color: var(--bg3);
+      background: var(--accent2);
+      padding: 4px 8px;
+    }
+
+    .work-title {
+      font-family: 'Press Start 2P', monospace;
+      font-size: 9px;
+      color: var(--accent);
+      line-height: 1.9;
+      letter-spacing: 0.5px;
+    }
+
+    .work-desc {
+      font-size: 15px;
+      color: var(--ink2);
+      line-height: 1.8;
+      margin: 12px 0 16px;
+    }
+
+    .work-tags {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-bottom: 18px;
+    }
+
+    .tag {
+      font-family: 'Press Start 2P', monospace;
+      font-size: 6px;
+      padding: 4px 8px;
+      border: 1px solid var(--border);
+      color: var(--ink3);
+      background: var(--bg2);
+    }
+
+    .work-link {
+      font-family: 'Press Start 2P', monospace;
+      font-size: 7px;
+      text-decoration: none;
+      color: var(--bg3);
+      background: var(--accent);
+      padding: 9px 16px;
+      display: inline-block;
+      box-shadow: 3px 3px 0 var(--accent2);
+      transition: all .1s;
+    }
+
+    .work-link:hover {
+      box-shadow: 1px 1px 0 var(--accent2);
+      transform: translate(2px, 2px);
+    }
+
+    /* =====================
+       経験（Experience）
+    ===================== */
+    .exp-list {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .exp-item {
+      display: grid;
+      grid-template-columns: 96px 1fr;
+      gap: 28px;
+      padding: 24px 0;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .exp-item:first-child {
+      border-top: 1px solid var(--border);
+    }
+
+    .exp-cat {
+      font-family: 'Press Start 2P', monospace;
+      font-size: 6px;
+      color: var(--accent2);
+      padding-top: 4px;
+      line-height: 2.2;
+    }
+
+    .exp-title {
+      font-size: 17px;
+      font-weight: 600;
+      color: var(--ink);
+      margin-bottom: 6px;
+    }
+
+    .exp-body {
+      font-size: 14px;
+      color: var(--ink2);
+      line-height: 1.8;
+    }
+
+    /* =====================
+       スキル（Skills）
+    ===================== */
+    .skills-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+
+    .skill-block {
+      background: var(--bg3);
+      border: 1px solid var(--border);
+      box-shadow: 4px 4px 0 var(--shadow);
+      padding: 22px 24px;
+    }
+
+    .skill-block-title {
+      font-family: 'Press Start 2P', monospace;
+      font-size: 7px;
+      color: var(--accent);
+      margin-bottom: 16px;
+      padding-bottom: 12px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .skill-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 9px 0;
+      border-bottom: 1px solid rgba(60, 46, 30, 0.08);
+      font-size: 15px;
+    }
+
+    .skill-row:last-child {
+      border: none;
+    }
+
+    .skill-n  { color: var(--ink); }
+    .skill-lv { color: var(--ink3); font-size: 13px; }
+
+    /* =====================
+       フッター
+    ===================== */
+    footer {
+      border-top: 1px solid var(--border);
+      padding: 32px;
+      text-align: center;
+      color: var(--ink3);
+      font-family: 'Press Start 2P', monospace;
+      font-size: 7px;
+      letter-spacing: 1px;
+      background: var(--bg2);
+      line-height: 2.4;
+    }
+
+    /* =====================
+       モーダル（画像ポップアップ）
+    ===================== */
+
+    /* 暗い背景オーバーレイ */
+    .modal-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.75);
+      z-index: 1000;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* 表示中のとき */
+    .modal-overlay.is-open {
+      display: flex;
+    }
+
+    /* モーダル本体 */
+    .modal-box {
+      background: var(--bg3);
+      border: 2px solid var(--border);
+      box-shadow: 6px 6px 0 var(--accent2);
+      max-width: 680px;
+      width: 90%;
+      padding: 28px;
+      position: relative;
+    }
+
+    /* 画像 */
+    .modal-box img {
+      width: 100%;
+      display: block;
+      border: 1px solid var(--border);
+      margin-bottom: 16px;
+    }
+
+    /* キャプション */
+    .modal-caption {
+      font-size: 14px;
+      color: var(--ink2);
+      line-height: 1.7;
+    }
+
+    /* 閉じるボタン */
+    .modal-close {
+      position: absolute;
+      top: 12px;
+      right: 14px;
+      font-family: 'Press Start 2P', monospace;
+      font-size: 8px;
+      color: var(--ink3);
+      background: none;
+      border: 1px solid var(--border);
+      padding: 5px 9px;
+      cursor: pointer;
+      transition: color .15s, border-color .15s;
+    }
+
+    .modal-close:hover {
+      color: var(--accent);
+      border-color: var(--accent);
+    }
+
+    /* =====================
+       レスポンシブ（スマホ対応）
+    ===================== */
+    @media (max-width: 640px) {
+      .profile-grid    { grid-template-columns: 1fr; }
+      .profile-img     { display: none; }
+      .exp-item        { grid-template-columns: 1fr; gap: 6px; }
+      .skills-grid     { grid-template-columns: 1fr; }
+      .hero-title      { font-size: 11px; }
+      .s-key           { min-width: 100px; }
+    }
+  </style>
 </head>
-
 <body>
-    <!-- ナビバー（白色） -->
-    <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-sm">
-        <div class="container">
-            <a class="navbar-brand" href="#">Portfolio Template</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav ms-auto">
-                    <li class="nav-item"><a class="nav-link active" href="#profile">Profile</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#experience">Experience</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#skills">Skills</a></li>
-                    <li class="nav-item"><a class="nav-link" href="#works">Works</a></li>
-                </ul>
-            </div>
+
+  <!-- ナビゲーション -->
+  <nav>
+    <div class="nav-inner">
+      <a class="nav-brand" href="#">My PORTFOLIO</a><!-- ← サイト名を変更 -->
+      <ul class="nav-links">
+        <li><a href="#profile">Profile</a></li>
+        <li><a href="#works">Works</a></li>
+        <li><a href="#experience">Experience</a></li>
+        <li><a href="#skills">Skills</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- ヒーロー -->
+  <div class="hero">
+    <p class="hero-eyebrow">PORTFOLIO  //  2026</p>
+    <h1 class="hero-title">
+      <span class="sub">Student  /  Data Science</span><!-- ← 肩書きを変更 -->
+      HELLO,<br>WORLD.<span class="cursor"></span>
+    </h1>
+    <span class="ai-note">* This site was designed with the assistance of AI (Claude)</span>
+  </div>
+
+  <hr class="divider">
+
+  <!-- プロフィール -->
+  <div id="profile" class="section">
+    <div class="section-header">
+      <span class="section-tag">PROFILE</span>
+      <span class="section-line"></span>
+    </div>
+    <div class="profile-grid">
+
+      <!-- 写真：<img src="your-photo.jpg" style="width:100%;aspect-ratio:1;object-fit:cover;"> に差し替え -->
+      <div class="profile-img">[ PHOTO<br>INSERT<br>HERE ]</div>
+
+      <div>
+        <!-- 基本情報（行を増減してOK） -->
+        <div class="info-row">
+          <span class="info-key">GitHub</span>
+          <span>github.com/yuzugosho</span><!-- ← GitHubリンクを変更 -->
         </div>
-    </nav>
-
-    <!-- ヒーロー -->
-    <section class="hero d-flex align-items-center">
-        <div class="container">
-            <h1 class="display-4 fw-bold mb-3">My Portfolio</h1>
-            <p class="lead">Portfolio Workshop Template</p>
+        <div class="info-row">
+          <span class="info-key">趣味</span>
+          <span>ミュージカル鑑賞、競技プログラミング</span><!-- ← 趣味を変更 -->
         </div>
-    </section>
 
-    <!-- プロフィール -->
-    <section id="profile" class="py-5 bg-white">
-        <div class="container">
-            <h2 class="text-center fw-bold mb-5">プロフィール</h2>
-            <div class="row align-items-center">
-                <div class="col-md-4 text-center mb-4 mb-md-0">
-                    <img src="https://via.placeholder.com/400x250" class="rounded-circle shadow-sm mb-3"
-                        style="width:200px; height:200px; object-fit:cover;" alt="プロフィール画像">
-                </div>
-                <div class="col-md-8">
-                    <ul class="list-unstyled fs-5 lh-lg mb-4">
-                        <li class="fw-bold fs-3 border-bottom pb-2 mb-3">○○ ○○</li>
-                        <li><strong>所属：</strong>九州工業大学 情報工学部 知能情報工学科 データ科学コース</li>
-                        <li><strong>Email：</strong>example[at]example.com</li>
-                        <li><strong>GitHub：</strong>https://github.com/yuzugosho</li>
-                    </ul>
-                    <p class="text-secondary lh-base">
-                        私の強みは、課題を発見し、仲間と連携しながら主体的に解決する力です。
-                        ジャグリングクラブで外部の参加者も含めた合宿の幹事を務めた際、過去のデータを分析して参加者が減少傾向にあることを発見しました。合宿の目的は、ジャグリングを通した交流です。そのため、多くの人に参加してほしいという部員の意見も踏まえ、参加者の増加を目標に設定しました。
-                        解決策として、開催時期を夏休み期間にする、合宿先をアクセスのよい場所に変更するなどの提案を行いました。また、例年は練習中心のプログラムでしたが、合宿の目的である交流を促進するため、花火などのイベントも開催しました。
-                        前例のない取り組みでしたが、部員と連携しながら準備を進め、最終的には参加者の約20%増加に成功。終了後のアンケートでも高い満足度を得ることができました。
-                        この経験から、課題に向き合い周囲を巻き込みながら成果を出す力が、自分の強みだと確信しています。
-                        この強みは、チームでお客様に寄り添った価値を提供するSIer業界の上流過程で活かすことができると考えます。
-                    </p>
-                </div>
-            </div>
+        <!-- 強み（行を増減してOK） -->
+        <div class="profile-bio">
+          <span class="bio-label">// About</span>
+          <div class="strength-row">
+            <span class="s-key">Problem Finding</span>
+            <span class="s-val">課題発見能力</span>
+          </div>
+          <div class="strength-row">
+            <span class="s-key">Execution</span>
+            <span class="s-val">実行力・やり抜く力</span>
+          </div>
+          <div class="strength-row">
+            <span class="s-key">Teamwork</span>
+            <span class="s-val">周囲を巻き込む推進力</span>
+          </div>
         </div>
-    </section>
+      </div>
+    </div>
+  </div>
 
-    <!-- 活動・経験（授業・研究など） -->
-    <section id="experience" class="py-5 bg-light">
-        <div class="container">
-            <h2 class="text-center fw-bold mb-4">活動・経験（授業・研究など）</h2>
-            <p class="text-center text-secondary mb-5">
-                ※自分の学年や状況に合わせて、授業で取り組んだこと、研究内容、課外活動などでアピールしたいことを記載しましょう。
-            </p>
+  <hr class="divider">
 
-            <!-- テーマ1：授業内容・頑張ったこと -->
-            <div class="card border-0 shadow-sm mb-4">
-                <div class="row g-0 align-items-center">
-                    <div class="col-md-8">
-                        <div class="card-body p-4 p-md-5">
-                            <h5 class="card-title fw-bold mb-3">
-                                【授業・演習】プログラミング演習でのチーム開発
-                            </h5>
-                            <p class="card-text text-secondary lh-lg">
-                                学部2年次のプログラミング演習にて、3人1組のチームで〇〇アプリを制作しました。
-                                役割分担やスケジュールの管理を行いながら、協力して課題を完成させました。
-                                この経験から、チームで開発を進める際のコミュニケーションの重要性を学びました。
-                            </p>
-                        </div>
-                    </div>
-                    <div class="col-md-4 text-center p-4">
-                        <img src="https://via.placeholder.com/400x250?text=Class+Work" alt="授業での取り組みイメージ"
-                            class="img-fluid rounded shadow-sm object-fit-cover"
-                            style="max-height: 200px; width: 100%;">
-                    </div>
-                </div>
-            </div>
+  <!-- 制作物 -->
+  <div id="works" class="section">
+    <div class="section-header">
+      <span class="section-tag">WORKS</span>
+      <span class="section-line"></span>
+    </div>
+    <div class="works-grid">
 
-            <!-- テーマ2：研究内容（配属済みの方向け） -->
-            <div class="card border-0 shadow-sm mb-4">
-                <div class="row g-0 align-items-center">
-                    <div class="col-md-8">
-                        <div class="card-body p-4 p-md-5">
-                            <h5 class="card-title fw-bold mb-3">
-                                【研究内容】Webユーザ行動ログの分析
-                            </h5>
-                            <p class="card-text text-secondary lh-lg">
-                                Webサイトのアクセスログを対象に、
-                                ユーザの閲覧傾向や行動パターンを分析する研究を行っています。
-                                Pythonを用いたデータ処理や可視化を通して、
-                                データから傾向を読み取る力を養っています。
-                            </p>
-                        </div>
-                    </div>
-                    <div class="col-md-4 text-center p-4">
-                        <img src="https://via.placeholder.com/400x250?text=Research" alt="研究テーマのイメージ"
-                            class="img-fluid rounded shadow-sm object-fit-cover"
-                            style="max-height: 200px; width: 100%;">
-                    </div>
-                </div>
-            </div>
-
-            <!-- テーマ3：課外活動・自主学習・頑張ったこと -->
-            <div class="card border-0 shadow-sm mb-4">
-                <div class="row g-0 align-items-center">
-                    <div class="col-md-8">
-                        <div class="card-body p-4 p-md-5">
-                            <h5 class="card-title fw-bold mb-3">
-                                【課外活動・自主学習】〇〇の資格取得・サークル活動
-                            </h5>
-                            <p class="card-text text-secondary lh-lg">
-                                大学の授業以外にも、〇〇分野に興味を持ち自主的に学習を進め、資格を取得しました。
-                                また、〇〇サークルでは副代表を務め、イベントの企画や運営に携わりました。
-                                目標に向けて継続的に努力する力や、周囲を巻き込んで企画を推進する力を身につけました。
-                            </p>
-                        </div>
-                    </div>
-                    <div class="col-md-4 text-center p-4">
-                        <img src="https://via.placeholder.com/400x250?text=Extra+Activities" alt="課外活動のイメージ"
-                            class="img-fluid rounded shadow-sm object-fit-cover"
-                            style="max-height: 200px; width: 100%;">
-                    </div>
-                </div>
-            </div>
+      <!-- 制作物カード1 -->
+      <div class="work-card">
+        <div class="work-head">
+          <span class="work-num">01</span>
+          <h3 class="work-title">Claude API<br>アンケート分析ツール</h3><!-- ← タイトルを変更 -->
         </div>
-    </section>
-
-    <!-- スキル・資格 -->
-    <section id="skills" class="py-5 bg-white">
-        <div class="container">
-            <h2 class="text-center fw-bold mb-5">スキル・資格</h2>
-            <div class="row g-4">
-                <div class="col-md-6">
-                    <div class="card border-0 shadow-sm h-100">
-                        <div class="card-body p-4">
-                            <h5 class="card-title fw-bold mb-4 border-bottom pb-2">プログラミング</h5>
-                            <ul class="list-group list-group-flush text-secondary">
-                                <li class="list-group-item border-0 px-0 py-2"><strong class="text-dark">HTML /
-                                        CSS</strong>：Webページ制作</li>
-                                <li class="list-group-item border-0 px-0 py-2"><strong
-                                        class="text-dark">JavaScript</strong>：簡単な動的処理</li>
-                                <li class="list-group-item border-0 px-0 py-2"><strong
-                                        class="text-dark">Python</strong>：データ解析・可視化</li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="card border-0 shadow-sm h-100">
-                        <div class="card-body p-4">
-                            <h5 class="card-title fw-bold mb-4 border-bottom pb-2">資格</h5>
-                            <ul class="list-group list-group-flush text-secondary">
-                                <li class="list-group-item border-0 px-0 py-2">特になし
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-            </div>
+        <p class="work-desc">Python と Claude API を組み合わせ、CSVアンケートデータから施策ヒントを自動抽出するツールを自作。部活の活動改善に実際に活用。Claude APIを使っているので無料のGemini APIに移行を検討中。</p><!-- ← 説明を変更 -->
+        <div class="work-tags">
+          <!-- タグは増減してOK -->
+          <span class="tag">Python</span>
+          <span class="tag">Claude API</span>
+          <span class="tag">CSV</span>
+          <span class="tag">NLP</span>
         </div>
-    </section>
+        <a href="#" class="work-link">▶ 詳細を見る ※準備中</a><!-- ← hrefにURLを入力 -->
+      </div>
 
-    <!-- Works -->
-    <section id="works" class="py-5 bg-light">
-        <div class="container">
-            <h2 class="text-center fw-bold mb-5">制作物</h2>
-            <div class="card border-0 shadow-sm mb-4">
-                <div class="row g-0 align-items-center">
-                    <div class="col-md-8">
-                        <div class="card-body p-4 p-md-5">
-                            <h5 class="card-title fw-bold mb-3">
-                                タスク管理Webアプリ
-                            </h5>
-                            <p class="card-text text-secondary lh-lg mb-4">
-                                タスクの追加・編集・削除ができる、
-                                シンプルなタスク管理Webアプリを制作しました。
-                                個人制作として、基本的なCRUD操作の理解を目的としています。
-                            </p>
-                            <p class="card-text mb-4">
-                                <span class="badge bg-secondary me-1">HTML</span>
-                                <span class="badge bg-secondary me-1">CSS</span>
-                                <span class="badge bg-secondary">JavaScript</span>
-                            </p>
-                            <a href="https://yuzugosho.github.io/todo.io/" class="btn btn-outline-primary px-4 rounded-pill">
-                                詳細を見る
-                            </a>
-                        </div>
-                    </div>
-                    <div class="col-md-4 text-center p-4">
-                        <img src="https://via.placeholder.com/400x250" alt="制作物のスクリーンショット"
-                            class="img-fluid rounded shadow-sm object-fit-cover"
-                            style="max-height: 200px; width: 100%;">
-                    </div>
-                </div>
-            </div>
+      <!-- 制作物カード2 -->
+      <div class="work-card">
+        <div class="work-head">
+          <span class="work-num">02</span>
+          <h3 class="work-title">タスク管理<br>Web アプリ</h3>
         </div>
-    </section>
-
-
-
-    <!-- フッター -->
-    <footer>
-        <div class="container">
-            <p class="mb-0">&copy; 2026 Portfolio Workshop Sample</p>
+        <p class="work-desc">タスクの追加・編集・削除ができるシンプルな管理ツール。CRUD操作の基礎学習として個人制作。</p>
+        <div class="work-tags">
+          <span class="tag">HTML</span>
+          <span class="tag">CSS</span>
+          <span class="tag">JavaScript</span>
         </div>
-    </footer>
+        <a href="https://yuzugosho.github.io/todo.io/" class="work-link" target="_blank" rel="noopener noreferrer">▶ 詳細を見る(Webページに飛ぶ)</a>
+      </div>
+
+      <!-- 制作物カード3 -->
+      <div class="work-card">
+        <div class="work-head">
+          <span class="work-num">03</span>
+          <h3 class="work-title">就活用ツール<br>Web アプリ</h3>
+        </div>
+        <p class="work-desc">インターンシップ情報の収集・整理・可視化を目的としたWebアプリ。個人利用なので公開なし。大部分をAIで作成。</p>
+        <div class="work-tags">
+          <span class="tag">バイブコーディング</span>
+        </div>
+        <!-- ↓ onclick="openModal()" でモーダルを開く。hrefは不要 -->
+        <button class="work-link" onclick="openModal()">▶ 詳細を見る</button>
+      </div>
+
+      <!-- 制作物カードn（追加する場合はここからコピー）
+      <div class="work-card">
+        <div class="work-head">
+          <span class="work-num">03</span>
+          <h3 class="work-title">タイトル</h3>
+        </div>
+        <p class="work-desc">説明文</p>
+        <div class="work-tags">
+          <span class="tag">タグ</span>
+        </div>
+        <a href="#" class="work-link">▶ 詳細を見る</a>
+      </div>
+      -->
+
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- 経験 -->
+  <div id="experience" class="section">
+    <div class="section-header">
+      <span class="section-tag">EXPERIENCE</span>
+      <span class="section-line"></span>
+    </div>
+    <div class="exp-list">
+
+      <!-- 経験1 -->
+      <div class="exp-item">
+        <span class="exp-cat">興味・<br>関心</span>
+        <div>
+          <p class="exp-title">ストリーム圧縮技術 × 機械学習</p>
+          <p class="exp-body">LZ4・Zstandard アルゴリズムや、機械学習・プライバシー保護との融合領域に関心を持ち、独自に調査・学習中。</p>
+        </div>
+      </div>
+
+      <!-- 経験2 -->
+      <div class="exp-item">
+        <span class="exp-cat"></span>
+        <div>
+          <p class="exp-title">準備中</p>
+          <p class="exp-body"></p>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <hr class="divider">
+
+  <!-- スキル -->
+  <div id="skills" class="section">
+    <div class="section-header">
+      <span class="section-tag">SKILLS</span>
+      <span class="section-line"></span>
+    </div>
+    <div class="skills-grid">
+
+      <!-- プログラミング -->
+      <div class="skill-block">
+        <p class="skill-block-title">// Programming</p>
+        <!-- スキル行は増減してOK -->
+        <div class="skill-row">
+          <span class="skill-n">Python</span>
+          <span class="skill-lv">data / API</span>
+        </div>
+        <div class="skill-row">
+          <span class="skill-n">HTML / CSS</span>
+          <span class="skill-lv">web dev</span>
+        </div>
+        <div class="skill-row">
+          <span class="skill-n">JavaScript</span>
+          <span class="skill-lv">frontend</span>
+        </div>
+      </div>
+
+      <!-- その他 -->
+      <div class="skill-block">
+        <p class="skill-block-title">// Other</p>
+        <div class="skill-row">
+          <span class="skill-n">Claude API</span>
+          <span class="skill-lv">実務活用</span>
+        </div>
+        <div class="skill-row">
+          <span class="skill-n">統計・分析</span>
+          <span class="skill-lv">学習中</span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- フッター -->
+  <footer>
+    (C) 2026 — My Portfolio — All rights reserved<br>
+    * This site was designed with the assistance of AI (Claude)
+  </footer>
+
+  <!-- =====================
+       モーダル（03 詳細ポップアップ）
+       表示したい画像のsrcをここで変更してください
+  ===================== -->
+  <div class="modal-overlay" id="workModal">
+    <div class="modal-box">
+      <button class="modal-close" onclick="closeModal()">✕ CLOSE</button>
+
+      <!-- ↓ HTMLと同じフォルダに画像を置いてください -->
+      <img src="就活管理サイトイメージ.png" alt="就活用ツール スクリーンショット">
+
+      <p class="modal-caption">
+        インターンシップ情報の収集・整理・可視化を目的としたWebアプリ。<br>
+        個人利用のため非公開。大部分をAIで作成。改善の余地やバグは多々あるが、個人利用の範疇ならAIに完全に任せてもよさそう？<br>
+      </p>
+    </div>
+  </div>
+
+  <script>
+    // モーダルを開く
+    function openModal() {
+      document.getElementById('workModal').classList.add('is-open');
+      document.body.style.overflow = 'hidden'; // 背景スクロールを止める
+    }
+
+    // モーダルを閉じる
+    function closeModal() {
+      document.getElementById('workModal').classList.remove('is-open');
+      document.body.style.overflow = '';
+    }
+
+    // 背景クリックでも閉じる
+    document.getElementById('workModal').addEventListener('click', function(e) {
+      if (e.target === this) closeModal();
+    });
+
+    // Escキーでも閉じる
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') closeModal();
+    });
+  </script>
 
 </body>
-
 </html>
